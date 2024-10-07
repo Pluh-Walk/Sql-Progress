@@ -13,7 +13,7 @@ public class IT2BCOLINATASKTRACKER {
         do{        
                 
         System.out.println("1. EMPLOYEE");
-        System.out.println("2. VIEW TASKS");
+        System.out.println("2. TASKS");
         System.out.println("3. UPDATE");
         System.out.println("4. DELETE");
         System.out.println("5. EXIT");
@@ -29,12 +29,13 @@ public class IT2BCOLINATASKTRACKER {
             break;
              
             case 2:
-                
-            break;
+                 Task task = new Task();
+                    task.taskExec();  // Call task menu
+                    break;
             
             case 3:
-                
-                
+
+        
             break;
             
             case 4:
