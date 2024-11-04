@@ -14,9 +14,8 @@ public class IT2BCOLINATASKTRACKER {
                 
         System.out.println("1. EMPLOYEE");
         System.out.println("2. TASKS");
-        System.out.println("3. UPDATE");
-        System.out.println("4. DELETE");
-        System.out.println("5. EXIT");
+        System.out.println("3. REPORTS");
+        System.out.println("4. EXIT");
         
        
         System.out.println("ENTER ACTION: ");
@@ -30,22 +29,19 @@ public class IT2BCOLINATASKTRACKER {
              
             case 2:
                  Task task = new Task();
-                    task.taskExec();  // Call task menu
+                    task.taskExec(); 
                     break;
             
             case 3:
-
-        
+                
             break;
             
             case 4:
+                System.out.println("thank you for using the system");
                 
             break;
              
-            case 5:
-                
-      
-            break;
+
 
             
             

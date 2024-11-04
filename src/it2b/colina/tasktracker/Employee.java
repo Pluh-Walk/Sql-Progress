@@ -4,12 +4,12 @@ import java.util.Scanner;
 
 public class Employee {
 
-    private config config;  // Assuming config class handles database interaction
+    private config conf;  
     private Scanner sc;
 
     public Employee() {
-        config = new config();  // Initialize config once
-        sc = new Scanner(System.in);  // Initialize Scanner once
+        conf = new config();  
+        sc = new Scanner(System.in);  
     }
 
     public void empExec() {
@@ -17,9 +17,9 @@ public class Employee {
 
         do {
             System.out.println("1. ADD EMPLOYEE: ");
-            System.out.println("2. VIEW EMPLOYEES: ");  // Corrected to VIEW EMPLOYEES
-            System.out.println("3. UPDATE: ");
-            System.out.println("4. DELETE: ");
+            System.out.println("2. VIEW EMPLOYEES: ");  
+            System.out.println("3. UPDATE EMPLOYEE: ");
+            System.out.println("4. DELETE EMPLOYEE: ");
             System.out.println("5. EXIT: ");
 
             System.out.print("ENTER ACTION: ");
@@ -31,7 +31,7 @@ public class Employee {
                     addEmployees();
                     break;
                 case 2:
-                    viewEmployees();  // Corrected call to viewEmployees
+                    viewEmployees();  
                     break;
                 case 3:
                     updateEmployee();
@@ -51,30 +51,30 @@ public class Employee {
         } while (response.equalsIgnoreCase("Y"));
 
         System.out.println("Goodbye!");
-        sc.close();  // Close Scanner at the end
+        sc.close(); 
     }
 
-public void addEmployees() {
-    System.out.print("Employee First Name: ");
-    String fname = sc.nextLine();
-    System.out.print("Employee Last Name: ");
-    String lname = sc.nextLine();
-    System.out.print("Employee Email: ");
-    String email = sc.nextLine();
-    System.out.print("Employee Status: ");
-    String status = sc.nextLine();
+    public void addEmployees() {
+        System.out.print("Employee First Name: ");
+        String fname = sc.nextLine();
+        System.out.print("Employee Last Name: ");
+        String lname = sc.nextLine();
+        System.out.print("Employee Email: ");
+        String email = sc.nextLine();
+        System.out.print("Employee Status: ");
+        String status = sc.nextLine();
 
-    String sql = "INSERT INTO tbl_employees (f_name, l_name, e_email, e_status) VALUES (?, ?, ?, ?)";
-    config.addRecord(sql, fname, lname, email, status); // Correct method call
-}
+        String sql = "INSERT INTO tbl_employees (f_name, l_name, e_email, e_status) VALUES (?, ?, ?, ?)";
+        conf.addRecord(sql, fname, lname, email, status);
+    }
 
-private void viewEmployees() {
-    String employeesQuery = "SELECT * FROM tbl_employees"; // Corrected to employees
-    String[] employeesHeaders = {"ID", "First Name", "Last Name", "Email", "Status"};
-    String[] employeesColumns = {"e_id", "f_name", "l_name", "e_email", "e_status"};
+    private void viewEmployees() {
+        String employeesQuery = "SELECT * FROM tbl_employees"; 
+        String[] employeesHeaders = {"ID", "First Name", "Last Name", "Email", "Status"};
+        String[] employeesColumns = {"e_id", "f_name", "l_name", "e_email", "e_status"};
 
-    config.viewRecords(employeesQuery, employeesHeaders, employeesColumns); // Correct method call
-}
+        conf.viewRecords(employeesQuery, employeesHeaders, employeesColumns); 
+    }
 
     private void updateEmployee() {
         System.out.print("Enter Employee ID to edit: ");
@@ -94,7 +94,7 @@ private void viewEmployees() {
         String newStatus = sc.nextLine();
 
         String sql = "UPDATE tbl_employees SET f_name = ?, l_name = ?, e_email = ?, e_status = ? WHERE e_id = ?";
-        config.addRecord("oten.db", sql, newFirstName, newLastName, newEmail, newStatus, employeeId);
+        conf.updateRecord(sql, newFirstName, newLastName, newEmail, newStatus, employeeId);
 
         System.out.println("Employee updated successfully.");
     }
@@ -109,7 +109,7 @@ private void viewEmployees() {
 
         if (confirmation.equalsIgnoreCase("Y")) {
             String sql = "DELETE FROM tbl_employees WHERE e_id = ?";
-            config.addRecord("oten.db", sql, employeeId);
+            conf.deleteRecord(sql, employeeId);
             System.out.println("Employee deleted successfully.");
         } else {
             System.out.println("Delete action canceled.");
