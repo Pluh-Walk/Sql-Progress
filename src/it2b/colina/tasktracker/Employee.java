@@ -29,15 +29,20 @@ public class Employee {
             switch (action) {
                 case 1:
                     addEmployees();
+                    viewEmployees(); 
                     break;
                 case 2:
                     viewEmployees();  
                     break;
                 case 3:
+                    viewEmployees(); 
                     updateEmployee();
+                    viewEmployees(); 
                     break;
                 case 4:
+                    viewEmployees(); 
                     deleteEmployee();  
+                    viewEmployees(); 
                     break;
                 case 5:
                     System.out.println("Exiting program.");
@@ -68,7 +73,7 @@ public class Employee {
         conf.addRecord(sql, fname, lname, email, status);
     }
 
-    private void viewEmployees() {
+    public void viewEmployees() {
         String employeesQuery = "SELECT * FROM tbl_employees"; 
         String[] employeesHeaders = {"ID", "First Name", "Last Name", "Email", "Status"};
         String[] employeesColumns = {"e_id", "f_name", "l_name", "e_email", "e_status"};

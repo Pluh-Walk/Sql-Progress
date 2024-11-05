@@ -20,7 +20,7 @@ public class Task {
             System.out.println("2. VIEW TASKS: ");
             System.out.println("3. UPDATE TASK: ");
             System.out.println("4. DELETE TASK: ");
-            System.out.println("5. BACK TO MAIN MENU: "); // Updated option to go back
+            System.out.println("5. BACK TO MAIN MENU: ");
 
             System.out.print("ENTER ACTION: ");
             int action = sc.nextInt();
@@ -34,14 +34,16 @@ public class Task {
                     viewTasks();
                     break;
                 case 3:
+                    viewTasks();
                     updateTask();
                     break;
                 case 4:
+                    viewTasks();
                     deleteTask();
                     break;
                 case 5:
                     System.out.println("Returning to main menu.");
-                    return; // Exit to main menu
+                    return;
                 default:
                     System.out.println("Invalid action. Please try again.");
             }
@@ -51,7 +53,7 @@ public class Task {
         } while (response.equalsIgnoreCase("Y"));
 
         System.out.println("Goodbye!");
-        sc.close(); // Close the scanner here
+        sc.close(); 
     }
 
     public void addTask() {
@@ -59,28 +61,20 @@ public class Task {
         String taskName = sc.nextLine();
         System.out.print("Task Description: ");
         String taskDesc = sc.nextLine();
-        System.out.print("Assigned Employee ID: ");
-        int employeeId = sc.nextInt();
-        sc.nextLine();  // Consume newline
-        System.out.print("Task Status: ");
-        String status = sc.nextLine();
-        System.out.print("Task Due Date (YYYY-MM-DD): ");
-        String dueDate = sc.nextLine();
+        String dateCreated = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
 
-        String sql = "INSERT INTO tbl_tasks (task_name, task_desc, employee_id, task_status, due_date) VALUES (?, ?, ?, ?, ?)";
-        conf.addRecord(sql, taskName, taskDesc, employeeId, status, dueDate); 
+        String sql = "INSERT INTO tbl_tasks (task_name, task_desc, date_created) VALUES (?, ?, ?)";
+        conf.addRecord(sql, taskName, taskDesc, dateCreated); 
     }
 
-    // Viewing all tasks
-    private void viewTasks() {
-        String taskQuery = "SELECT * FROM tbl_tasks";
-        String[] taskHeaders = {"Task ID", "Task Name", "Description", "Employee ID", "Status", "Due Date"};
-        String[] taskColumns = {"task_id", "task_name", "task_desc", "employee_id", "task_status", "due_date"};
+    public void viewTasks() {
+        String taskQuery = "SELECT task_id, task_name, task_desc, date_created FROM tbl_tasks"; // Exclude due date and status
+        String[] taskHeaders = {"Task ID", "Task Name", "Description", "Date Created"};
+        String[] taskColumns = {"task_id", "task_name", "task_desc", "date_created"};
 
         conf.viewRecords(taskQuery, taskHeaders, taskColumns); 
     }
 
-    // Updating a task
     private void updateTask() {
         System.out.print("Enter Task ID to edit: ");
         int taskId = sc.nextInt();
@@ -92,14 +86,8 @@ public class Task {
         System.out.print("Enter new task description: ");
         String newTaskDesc = sc.nextLine();
 
-        System.out.print("Enter new task status: ");
-        String newStatus = sc.nextLine();
-
-        System.out.print("Enter new due date (YYYY-MM-DD): ");
-        String newDueDate = sc.nextLine();
-
-        String sql = "UPDATE tbl_tasks SET task_name = ?, task_desc = ?, task_status = ?, due_date = ? WHERE task_id = ?";
-        conf.updateRecord(sql, newTaskName, newTaskDesc, newStatus, newDueDate, taskId);
+        String sql = "UPDATE tbl_tasks SET task_name = ?, task_desc = ? WHERE task_id = ?";
+        conf.updateRecord(sql, newTaskName, newTaskDesc, taskId);
 
         System.out.println("Task updated successfully.");
     }
