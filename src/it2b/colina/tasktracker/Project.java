@@ -97,9 +97,11 @@ public class Project {
     }
 
     private void viewProjects() {
-        String projectQuery = "SELECT * FROM tbl_projects";
-        String[] projectHeaders = {"Project ID", "Task ID", "Employee ID", "Due Date", "Status"};
-        String[] projectColumns = {"project_id", "task_id", "employee_id", "due_date", "status"};
+        String projectQuery = "SELECT * FROM tbl_projects "
+                + "JOIN tbl_tasks ON tbl_projects.task_id = tbl_tasks.task_id "
+                + "JOIN tbl_employees ON tbl_projects.employee_id = tbl_employees.e_id";
+        String[] projectHeaders = {"Project ID", "Task Name", "E_Name", "Due Date", "Status"};
+        String[] projectColumns = {"project_id", "task_name", "l_name", "due_date", "status"};
 
         conf.viewRecords(projectQuery, projectHeaders, projectColumns);
     }
