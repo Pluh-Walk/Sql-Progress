@@ -92,13 +92,13 @@ public class Reports {
 
     public void viewEmployeeOverview() {
         System.out.println("=== Employee Overview ===");
-        String employeeQuery = "SELECT e.e_id, e.e_email, t.task_id, t.task_name, p.due_date " +
+        String employeeQuery = "SELECT e.e_id,e.f_name,e.l_name, e.e_email, t.task_id, t.task_name, p.due_date " +
                                "FROM tbl_employees e " +
                                "LEFT JOIN tbl_projects p ON e.e_id = p.employee_id " +
                                "LEFT JOIN tbl_tasks t ON p.task_id = t.task_id";
 
-        String[] employeeHeaders = {"Employee ID", "Employee Email", "Task ID", "Task Name", "Due Date"};
-        String[] employeeColumns = {"e_id", "e_email", "task_id", "task_name", "due_date"};
+        String[] employeeHeaders = {"Employee ID","Employee Email", "First Name", "Last Name", "Task ID", "Task Name", "Due Date"};
+        String[] employeeColumns = {"e_id", "e_email","f_name","l_name", "task_id", "task_name", "due_date"};
 
         conf.viewRecords(employeeQuery, employeeHeaders, employeeColumns);
     }
