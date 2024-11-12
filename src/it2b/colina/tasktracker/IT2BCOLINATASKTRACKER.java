@@ -1,5 +1,6 @@
 package it2b.colina.tasktracker;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class IT2BCOLINATASKTRACKER {
@@ -8,17 +9,29 @@ public class IT2BCOLINATASKTRACKER {
         
         Scanner sc = new Scanner(System.in);
         String response;
-        
+
         do {        
             System.out.println("1. EMPLOYEE");
             System.out.println("2. TASKS");
             System.out.println("3. PROJECTS");
             System.out.println("4. REPORTS");
             System.out.println("5. EXIT");
-        
-            System.out.print("ENTER ACTION: ");
-            int action = sc.nextInt();
-        
+
+            int action = 0; 
+            boolean validInput = false; 
+
+            while (!validInput) {
+                System.out.print("ENTER ACTION: ");
+                try {
+                    action = sc.nextInt();
+                    sc.nextLine(); 
+                    validInput = true; 
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                    sc.nextLine(); 
+                }
+            }
+
             switch(action) {
                 case 1:
                     Employee emp = new Employee();
@@ -32,15 +45,16 @@ public class IT2BCOLINATASKTRACKER {
             
                 case 3:
                     Project project = new Project();
-                    project.projectExec(); // Call the project execution method
+                    project.projectExec(); 
                     break;
             
                 case 4:
-                    System.out.println("Thank you for using the system.");
+                    Reports report  = new Reports();
+                    report.showReportsMenu(); 
                     break;
                 
                 case 5:
-                    System.out.println("Exiting the system. Goodbye!");
+                    System.out.println("Exiting the system. Goodbye!4");
                     break;
 
                 default:
@@ -50,11 +64,11 @@ public class IT2BCOLINATASKTRACKER {
 
             if (action != 5) {
                 System.out.print("Do you want to continue? (Y/N): ");
-                response = sc.next();
+                response = sc.nextLine();
             } else {
                 response = "N"; 
             }
-        
+
         } while(response.equalsIgnoreCase("Y"));
         
         System.out.println("Kaon Pakag Tae");

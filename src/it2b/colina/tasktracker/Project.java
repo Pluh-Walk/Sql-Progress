@@ -1,5 +1,6 @@
 package it2b.colina.tasktracker;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Project {
@@ -22,9 +23,20 @@ public class Project {
             System.out.println("4. DELETE PROJECT: ");
             System.out.println("5. BACK TO MAIN MENU: ");
 
-            System.out.print("ENTER ACTION: ");
-            int action = sc.nextInt();
-            sc.nextLine();
+            int action = 0;
+            boolean validInput = false;
+
+            while (!validInput) {
+                System.out.print("ENTER ACTION: ");
+                try {
+                    action = sc.nextInt();
+                    sc.nextLine(); 
+                    validInput = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                    sc.nextLine();
+                }
+            }
 
             switch (action) {
                 case 1:
@@ -61,30 +73,45 @@ public class Project {
         Task task = new Task();
         task.viewTasks();
 
-        System.out.print("Task ID to assign: ");
-        int taskId = sc.nextInt();
-        sc.nextLine(); // Consume newline
-
-        String tsql = "SELECT task_id FROM tbl_tasks WHERE task_id = ?";
-        while (conf.getSingleValue(tsql, taskId) == 0) {
-            System.out.print("Task doesn't exist, Select Again: ");
-            taskId = sc.nextInt();
-            sc.nextLine(); // Consume newline
+        int taskId = 0;
+        boolean validTaskId = false;
+        while (!validTaskId) {
+            System.out.print("Task ID to assign: ");
+            try {
+                taskId = sc.nextInt();
+                sc.nextLine();
+                String tsql = "SELECT task_id FROM tbl_tasks WHERE task_id = ?";
+                if (conf.getSingleValue(tsql, taskId) != 0) {
+                    validTaskId = true; 
+                } else {
+                    System.out.println("Task doesn't exist, select again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid Task ID.");
+                sc.nextLine();
+            }
         }
 
         emp.viewEmployees();
-        System.out.print("Employee ID to assign: ");
-        int employeeId = sc.nextInt();
-        sc.nextLine(); // Consume newline
-
-        String esql = "SELECT e_id FROM tbl_employees WHERE e_id = ?";
-        while (conf.getSingleValue(esql, employeeId) == 0) {
-            System.out.print("Employee doesn't exist, Select Again: ");
-            employeeId = sc.nextInt();
-            sc.nextLine(); // Consume newline
+        int employeeId = 0;
+        boolean validEmployeeId = false;
+        while (!validEmployeeId) {
+            System.out.print("Employee ID to assign: ");
+            try {
+                employeeId = sc.nextInt();
+                sc.nextLine(); 
+                String esql = "SELECT e_id FROM tbl_employees WHERE e_id = ?";
+                if (conf.getSingleValue(esql, employeeId) != 0) {
+                    validEmployeeId = true;
+                } else {
+                    System.out.println("Employee doesn't exist, select again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid Employee ID.");
+                sc.nextLine();
+            }
         }
 
-        // New fields for due date and status
         System.out.print("Enter due date (YYYY-MM-DD): ");
         String dueDate = sc.nextLine();
 
@@ -105,19 +132,48 @@ public class Project {
     }
 
     private void updateProject() {
-        System.out.print("Enter Project ID to edit: ");
-        int projectId = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        int projectId = 0;
+        boolean validProjectId = false;
+        while (!validProjectId) {
+            System.out.print("Enter Project ID to edit: ");
+            try {
+                projectId = sc.nextInt();
+                sc.nextLine(); 
+                validProjectId = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid Project ID.");
+                sc.nextLine();
+            }
+        }
 
-        System.out.print("Enter new Task ID: ");
-        int newTaskId = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        int newTaskId = 0;
+        boolean validNewTaskId = false;
+        while (!validNewTaskId) {
+            System.out.print("Enter new Task ID: ");
+            try {
+                newTaskId = sc.nextInt();
+                sc.nextLine();
+                validNewTaskId = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid Task ID.");
+                sc.nextLine(); 
+            }
+        }
 
-        System.out.print("Enter new Employee ID: ");
-        int newEmployeeId = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        int newEmployeeId = 0;
+        boolean validNewEmployeeId = false;
+        while (!validNewEmployeeId) {
+            System.out.print("Enter new Employee ID: ");
+            try {
+                newEmployeeId = sc.nextInt();
+                sc.nextLine(); 
+                validNewEmployeeId = true; 
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid Employee ID.");
+                sc.nextLine(); 
+            }
+        }
 
-        // New fields for due date and status
         System.out.print("Enter new due date (YYYY-MM-DD): ");
         String newDueDate = sc.nextLine();
 
@@ -130,9 +186,19 @@ public class Project {
     }
 
     private void deleteProject() {
-        System.out.print("Enter Project ID to delete: ");
-        int projectId = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        int projectId = 0;
+        boolean validProjectId = false;
+        while (!validProjectId) {
+            System.out.print("Enter Project ID to delete: ");
+            try {
+                projectId = sc.nextInt();
+                sc.nextLine(); 
+                validProjectId = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid Project ID.");
+                sc.nextLine(); // Clear the invalid input
+            }
+        }
 
         System.out.print("Are you sure you want to delete Project ID " + projectId + "? (Y/N): ");
         String confirmation = sc.nextLine();

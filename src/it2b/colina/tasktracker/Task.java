@@ -1,5 +1,6 @@
 package it2b.colina.tasktracker;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Task {
@@ -22,9 +23,20 @@ public class Task {
             System.out.println("4. DELETE TASK: ");
             System.out.println("5. BACK TO MAIN MENU: ");
 
-            System.out.print("ENTER ACTION: ");
-            int action = sc.nextInt();
-            sc.nextLine(); 
+            int action = 0; 
+            boolean validInput = false; 
+
+            while (!validInput) {
+                System.out.print("ENTER ACTION: ");
+                try {
+                    action = sc.nextInt();
+                    sc.nextLine(); 
+                    validInput = true; 
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                    sc.nextLine(); 
+                }
+            }
 
             switch (action) {
                 case 1:
