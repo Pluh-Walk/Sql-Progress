@@ -14,62 +14,75 @@ public class Employee {
     }
 
     public void empExec() {
-        String response;
+    String response = "N"; 
 
-        do {
-            System.out.println("1. ADD EMPLOYEE: ");
-            System.out.println("2. VIEW EMPLOYEES: ");  
-            System.out.println("3. UPDATE EMPLOYEE: ");
-            System.out.println("4. DELETE EMPLOYEE: ");
-            System.out.println("5. EXIT: ");
+    do {
+        System.out.println("1. ADD EMPLOYEE: ");
+        System.out.println("2. VIEW EMPLOYEES: ");  
+        System.out.println("3. UPDATE EMPLOYEE: ");
+        System.out.println("4. DELETE EMPLOYEE: ");
+        System.out.println("5. EXIT: ");
 
-            int action = 0; 
-            boolean validInput = false; 
+        int action = 0; 
+        boolean validInput = false; 
 
-            while (!validInput) {
-                System.out.print("ENTER ACTION: ");
-                try {
-                    action = sc.nextInt();
-                    sc.nextLine();
-                    validInput = true; 
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number between 1 and 5.");
-                    sc.nextLine(); 
-                }
+        while (!validInput) {
+            System.out.print("ENTER ACTION: ");
+            try {
+                action = sc.nextInt();
+                sc.nextLine();
+                validInput = true; 
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                sc.nextLine(); 
             }
+        }
 
-            switch (action) {
-                case 1:
-                    addEmployees();
-                    viewEmployees(); 
-                    break;
-                case 2:
-                    viewEmployees();  
-                    break;
-                case 3:
-                    viewEmployees(); 
-                    updateEmployee();
-                    viewEmployees(); 
-                    break;
-                case 4:
-                    viewEmployees(); 
-                    deleteEmployee();  
-                    viewEmployees(); 
-                    break;
-                case 5:
-                    System.out.println("Exiting program.");
-                    return;  
-                default:
-                    System.out.println("Invalid action. Please try again.");
-            }
+        switch (action) {
+            case 1:
+                addEmployees();
+                viewEmployees(); 
+                break;
+            case 2:
+                viewEmployees();  
+                break;
+            case 3:
+                viewEmployees(); 
+                updateEmployee();
+                viewEmployees(); 
+                break;
+            case 4:
+                viewEmployees(); 
+                deleteEmployee();  
+                viewEmployees(); 
+                break;
+            case 5:
+                System.out.println("Returning to Menu");
+                return;  
+            default:
+                System.out.println("Invalid action. Please try again.");
+        }
 
+        // Loop for valid confirmation input
+        boolean validResponse = false;
+        while (!validResponse) {
             System.out.print("Do you want to continue? (Y/N): ");
             response = sc.nextLine();
-        } while (response.equalsIgnoreCase("Y"));
 
-        System.out.println("Goodbye!");
-        sc.close(); 
-    }
+            if (response.equalsIgnoreCase("Y")) {
+                validResponse = true; // Valid response, continue
+            } else if (response.equalsIgnoreCase("N")) {
+                validResponse = true; // Valid response, exit
+            } else {
+                System.out.println("Invalid input. Please enter 'Y' or 'N'.");
+            }
+        }
+
+    } while (response.equalsIgnoreCase("Y"));
+
+    System.out.println("Goodbye!");
+    sc.close(); 
+}
 
     public void addEmployees() {
         System.out.print("Employee First Name: ");
@@ -117,19 +130,31 @@ public class Employee {
     }
 
     private void deleteEmployee() {
+    int employeeId = 0; 
+    boolean validId = false;
+
+    
+    while (!validId) {
         System.out.print("Enter Employee ID to delete: ");
-        int employeeId = sc.nextInt();
-        sc.nextLine();  
-
-        System.out.print("Are you sure you want to delete Employee ID " + employeeId + "? (Y/N): ");
-        String confirmation = sc.nextLine();
-
-        if (confirmation.equalsIgnoreCase("Y")) {
-            String sql = "DELETE FROM tbl_employees WHERE e_id = ?";
-            conf.deleteRecord(sql, employeeId);
-            System.out.println("Employee deleted successfully.");
-        } else {
-            System.out.println("Delete action canceled.");
+        try {
+            employeeId = sc.nextInt(); 
+            sc.nextLine(); 
+            validId = true; 
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid Employee ID (numeric).");
+            sc.nextLine(); 
         }
     }
+
+    System.out.print("Are you sure you want to delete Employee ID " + employeeId + "? (Y/N): ");
+    String confirmation = sc.nextLine();
+
+    if (confirmation.equalsIgnoreCase("Y")) {
+        String sql = "DELETE FROM tbl_employees WHERE e_id = ?";
+        conf.deleteRecord(sql, employeeId);
+        System.out.println("Employee deleted successfully.");
+    } else {
+        System.out.println("Delete action canceled.");
+    }
+}
 }

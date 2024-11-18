@@ -10,7 +10,8 @@ public class IT2BCOLINATASKTRACKER {
         Scanner sc = new Scanner(System.in);
         String response;
 
-        do {        
+        do {
+            System.out.println("==The Task Tracker==");
             System.out.println("1. EMPLOYEE");
             System.out.println("2. TASKS");
             System.out.println("3. PROJECTS");
@@ -27,6 +28,12 @@ public class IT2BCOLINATASKTRACKER {
                     sc.nextLine(); 
                     validInput = true; 
                 } catch (InputMismatchException e) {
+                    System.out.println("==The Task Tracker==");
+                    System.out.println("1. EMPLOYEE");
+                    System.out.println("2. TASKS");
+                    System.out.println("3. PROJECTS");
+                    System.out.println("4. REPORTS");
+                    System.out.println("5. EXIT");
                     System.out.println("Invalid input. Please enter a number between 1 and 5.");
                     sc.nextLine(); 
                 }
@@ -54,7 +61,7 @@ public class IT2BCOLINATASKTRACKER {
                     break;
                 
                 case 5:
-                    System.out.println("Exiting the system. Goodbye!4");
+                    System.out.println("Exiting the system. Goodbye!");
                     break;
 
                 default:

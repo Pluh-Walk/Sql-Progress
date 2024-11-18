@@ -13,58 +13,70 @@ public class Reports {
         sc = new Scanner(System.in);
     }
 
+
+
     public void showReportsMenu() {
-        String response;
+    String response = "N"; 
 
-        do {
-            System.out.println("=== Reports Menu ===");
-            System.out.println("1. View Project Details");
-            System.out.println("2. View Employee Overview");
-            System.out.println("3. View Task Details");
-            System.out.println("4. Back to Main Menu");
+    do {
+        System.out.println("=== Reports Menu ===");
+        System.out.println("1. View Project Details");
+        System.out.println("2. View Employee Overview");
+        System.out.println("3. View Task Details");
+        System.out.println("4. Back to Main Menu");
 
-            int reportAction = 0; 
-            boolean validInput = false; 
+        int reportAction = 0; 
+        boolean validInput = false; 
 
-            while (!validInput) {
-                System.out.print("ENTER ACTION: ");
-                try {
-                    reportAction = sc.nextInt();
-                    sc.nextLine(); 
-                    validInput = true; 
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number between 1 and 4.");
-                    sc.nextLine(); 
-                }
+        while (!validInput) {
+            System.out.print("ENTER ACTION: ");
+            try {
+                reportAction = sc.nextInt();
+                sc.nextLine(); 
+                validInput = true; 
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                sc.nextLine(); 
             }
+        }
 
-            switch (reportAction) {
-                case 1:
-                    viewProjectDetails();
-                    break;
-                case 2:
-                    viewEmployeeOverview();
-                    break;
-                case 3:
-                    viewTaskDetails();
-                    break;
-                case 4:
-                    System.out.println("Returning to main menu.");
-                    break;
-                default:
-                    System.out.println("Invalid action. Please try again.");
-                    break;
-            }
+        switch (reportAction) {
+            case 1:
+                viewProjectDetails();
+                break;
+            case 2:
+                viewEmployeeOverview();
+                break;
+            case 3:
+                viewTaskDetails();
+                break;
+            case 4:
+                System.out.println("Returning to main menu.");
+                response = "N"; // Set response to 'N' to exit
+                break;
+            default:
+                System.out.println("Invalid action. Please try again.");
+                break;
+        }
 
-            if (reportAction != 4) {
+        if (reportAction != 4) { // Only ask about continuing if not returning to main menu
+            boolean validResponse = false;
+            while (!validResponse) {
                 System.out.print("Do you want to continue viewing reports? (Y/N): ");
                 response = sc.nextLine();
-            } else {
-                response = "N"; 
-            }
 
-        } while (response.equalsIgnoreCase("Y"));
-    }
+                if (response.equalsIgnoreCase("Y")) {
+                    validResponse = true; // Valid response, continue
+                } else if (response.equalsIgnoreCase("N")) {
+                    validResponse = true; // Valid response, exit
+                } else {
+                    System.out.println("Invalid input. Please enter 'Y' or 'N'.");
+                }
+            }
+        }
+
+    } while (response.equalsIgnoreCase("Y"));
+}
 
    public void viewProjectDetails() {
     System.out.println("=== Project Details ===");

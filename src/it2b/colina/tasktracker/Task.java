@@ -14,7 +14,7 @@ public class Task {
     }
 
     public void taskExec() {
-        String response;
+        String response = null;
 
         do {
             System.out.println("1. ADD TASK: ");
@@ -60,8 +60,21 @@ public class Task {
                     System.out.println("Invalid action. Please try again.");
             }
 
-            System.out.print("Do you want to continue? (Y/N): ");
-            response = sc.nextLine();
+            // Loop for valid confirmation input
+            boolean validResponse = false;
+            while (!validResponse) {
+                System.out.print("Do you want to continue? (Y/N): ");
+                response = sc.nextLine();
+
+                if (response.equalsIgnoreCase("Y")) {
+                    validResponse = true; // Valid response, continue
+                } else if (response.equalsIgnoreCase("N")) {
+                    validResponse = true; // Valid response, exit
+                } else {
+                    System.out.println("Invalid input. Please enter 'Y' or 'N'.");
+                }
+            }
+
         } while (response.equalsIgnoreCase("Y"));
 
         System.out.println("Goodbye!");
@@ -69,10 +82,31 @@ public class Task {
     }
 
     public void addTask() {
-        System.out.print("Task Name: ");
-        String taskName = sc.nextLine();
-        System.out.print("Task Description: ");
-        String taskDesc = sc.nextLine();
+        String taskName = "";
+        String taskDesc = "";
+
+        // Validate task name
+        while (true) {
+            System.out.print("Task Name: ");
+            taskName = sc.nextLine();
+            if (isValidTaskName(taskName)) {
+                break; // Valid input, exit the loop
+            } else {
+                System.out.println("Invalid input. Please enter a valid task name (letters and spaces only).");
+            }
+        }
+
+        // Validate task description
+        while (true) {
+            System.out.print("Task Description: ");
+            taskDesc = sc.nextLine();
+            if (isValidTaskDescription(taskDesc)) {
+                break; // Valid input, exit the loop
+            } else {
+                System.out.println("Invalid input. Please enter a valid task description (letters and spaces only).");
+            }
+        }
+
         String dateCreated = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
 
         String sql = "INSERT INTO tbl_tasks (task_name, task_desc, date_created) VALUES (?, ?, ?)";
@@ -80,7 +114,7 @@ public class Task {
     }
 
     public void viewTasks() {
-        String taskQuery = "SELECT task_id, task_name, task_desc, date_created FROM tbl_tasks"; // Exclude due date and status
+        String taskQuery = "SELECT task_id, task_name, task_desc, date_created FROM tbl_tasks"; 
         String[] taskHeaders = {"Task ID", "Task Name", "Description", "Date Created"};
         String[] taskColumns = {"task_id", "task_name", "task_desc", "date_created"};
 
@@ -92,11 +126,30 @@ public class Task {
         int taskId = sc.nextInt();
         sc.nextLine(); 
 
-        System.out.print("Enter new task name: ");
-        String newTaskName = sc.nextLine();
+        String newTaskName = "";
+        String newTaskDesc = "";
 
-        System.out.print("Enter new task description: ");
-        String newTaskDesc = sc.nextLine();
+        // Validate new task name
+        while (true) {
+            System.out.print("Enter new task name: ");
+            newTaskName = sc.nextLine();
+            if (isValidTaskName(newTaskName)) {
+                break; // Valid input, exit the loop
+            } else {
+                System.out.println("Invalid input. Please enter a valid task name (letters and spaces only).");
+            }
+        }
+
+        // Validate new task description
+        while (true) {
+            System.out.print("Enter new task description: ");
+            newTaskDesc = sc.nextLine();
+            if (isValidTaskDescription(newTaskDesc)) {
+                break; // Valid input, exit the loop
+            } else {
+                System.out.println("Invalid input. Please enter a valid task description (letters and spaces only).");
+            }
+        }
 
         String sql = "UPDATE tbl_tasks SET task_name = ?, task_desc = ? WHERE task_id = ?";
         conf.updateRecord(sql, newTaskName, newTaskDesc, taskId);
@@ -105,19 +158,40 @@ public class Task {
     }
 
     private void deleteTask() {
+    int taskId = 0; 
+    boolean validId = false; 
+
+   
+    while (!validId) {
         System.out.print("Enter Task ID to delete: ");
-        int taskId = sc.nextInt();
-        sc.nextLine(); 
-
-        System.out.print("Are you sure you want to delete Task ID " + taskId + "? (Y/N): ");
-        String confirmation = sc.nextLine();
-
-        if (confirmation.equalsIgnoreCase("Y")) {
-            String sql = "DELETE FROM tbl_tasks WHERE task_id = ?";
-            conf.deleteRecord(sql, taskId);
-            System.out.println("Task deleted successfully.");
-        } else {
-            System.out.println("Delete action canceled.");
+        try {
+            taskId = sc.nextInt(); 
+            sc.nextLine();
+            validId = true; 
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid Task ID (numeric).");
+            sc.nextLine(); 
         }
+    }
+
+    System.out.print("Are you sure you want to delete Task ID " + taskId + "? (Y/N): ");
+    String confirmation = sc.nextLine();
+
+    if (confirmation.equalsIgnoreCase("Y")) {
+        String sql = "DELETE FROM tbl_tasks WHERE task_id = ?";
+        conf.deleteRecord(sql, taskId);
+        System.out.println("Task deleted successfully.");
+    } else {
+        System.out.println("Delete action canceled.");
+    }
+}
+    // Method to check if the task name is valid (only letters and spaces)
+    private boolean isValidTaskName(String name) {
+        return name.matches("[a-zA-Z\\s]+"); // Only allows letters and spaces
+    }
+
+    // Method to check if the task description is valid (only letters and spaces)
+    private boolean isValidTaskDescription(String description) {
+        return description.matches("[a-zA-Z0-9\\s,.!?]+"); // Allows letters, numbers, spaces, and common punctuation
     }
 }

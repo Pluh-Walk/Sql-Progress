@@ -33,6 +33,11 @@ public class Project {
                     sc.nextLine(); 
                     validInput = true;
                 } catch (InputMismatchException e) {
+                    System.out.println("1. ASSIGN PROJECT: ");
+                    System.out.println("2. VIEW PROJECTS: ");
+                    System.out.println("3. UPDATE PROJECT: ");
+                    System.out.println("4. DELETE PROJECT: ");
+                    System.out.println("5. BACK TO MAIN MENU: ");
                     System.out.println("Invalid input. Please enter a number between 1 and 5.");
                     sc.nextLine();
                 }
@@ -135,6 +140,8 @@ public class Project {
 
     private void updateProject() {
         int projectId = 0;
+        Employee emp = new Employee();
+        Task task = new Task();
         boolean validProjectId = false;
         while (!validProjectId) {
             System.out.print("Enter Project ID to edit: ");
@@ -147,7 +154,7 @@ public class Project {
                 sc.nextLine();
             }
         }
-
+        task.viewTasks();
         int newTaskId = 0;
         boolean validNewTaskId = false;
         while (!validNewTaskId) {
@@ -161,7 +168,7 @@ public class Project {
                 sc.nextLine(); 
             }
         }
-
+        emp.viewEmployees();
         int newEmployeeId = 0;
         boolean validNewEmployeeId = false;
         while (!validNewEmployeeId) {
@@ -198,7 +205,7 @@ public class Project {
                 validProjectId = true;
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid Project ID.");
-                sc.nextLine(); // Clear the invalid input
+                sc.nextLine(); 
             }
         }
 
