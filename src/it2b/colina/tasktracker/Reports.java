@@ -51,9 +51,8 @@ public class Reports {
                 viewTaskDetails();
                 break;
             case 4:
-                System.out.println("Returning to main menu.");
-                response = "N"; // Set response to 'N' to exit
-                break;
+                System.out.println("Returning to main menu."); 
+                return;
             default:
                 System.out.println("Invalid action. Please try again.");
                 break;
@@ -115,18 +114,23 @@ public class Reports {
         conf.viewRecords(employeeQuery, employeeHeaders, employeeColumns);
     }
 
-    public void viewTaskDetails() {
+  public void viewTaskDetails() {
     System.out.println("=== Task Details ===");
-    
-    
-    String taskQuery = "SELECT t.task_id, t.task_name, t.date_created, p.due_date, e.e_id, e.e_email " +
+
+    String taskQuery = "SELECT t.task_id, t.task_name, t.date_created, p.due_date, " +
+                       "e.e_id, e.e_email, e.f_name, e.l_name " +
                        "FROM tbl_tasks t " +
                        "LEFT JOIN tbl_projects p ON t.task_id = p.task_id " +  
                        "LEFT JOIN tbl_employees e ON p.employee_id = e.e_id"; 
 
-    String[] taskHeaders = {"Task ID", "Task Name", "Date Created", "Due Date", "Employee ID", "Employee Email"};
-    String[] taskColumns = {"task_id", "task_name", "date_created", "due_date", "e_id", "e_email"};
+    String[] taskHeaders = {"Task ID", "Task Name", "Date Created", "Due Date", "Employee ID", "Employee Email", "First Name", "Last Name"};
+    String[] taskColumns = {"task_id", "task_name", "date_created", "due_date", "e_id", "e_email", "f_name", "l_name"};
 
-    conf.viewRecords(taskQuery, taskHeaders, taskColumns);
+    try {
+        // Attempt to view records
+        conf.viewRecords(taskQuery, taskHeaders, taskColumns);
+    } catch (Exception e) {
+        System.err.println("An error occurred while retrieving task details: " + e.getMessage());
+    }
 }
 }
