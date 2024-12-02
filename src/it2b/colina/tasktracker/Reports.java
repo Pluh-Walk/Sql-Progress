@@ -92,17 +92,20 @@ public void viewProjectDetails() {
     Project prog = new Project();
 
     System.out.println("=== View Project Details ===");
-    prog.viewProjects();
+    prog.viewProjects(); // Display available projects
 
     int projectId = getValidIntegerInput("Enter Project ID to view details: ");
 
-    String sql = "SELECT p.project_id, t.task_name, t.task_desc " +
+    // SQL query to fetch project details including tasks, employees, and task creation date
+    String sql = "SELECT p.project_id, t.task_name, t.date_created, e.e_id, e.f_name, e.l_name, e.e_email, p.due_date, p.status " +
                  "FROM tbl_projects p " +
                  "JOIN tbl_tasks t ON p.task_id = t.task_id " +
+                 "JOIN tbl_employees e ON p.employee_id = e.e_id " +
                  "WHERE p.project_id = ?";
 
     try (Connection conn = conf.connectDB();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
         pstmt.setInt(1, projectId);
         ResultSet rs = pstmt.executeQuery();
 
@@ -110,12 +113,12 @@ public void viewProjectDetails() {
             System.out.println("\n--------------- Project Details ---------------");
             System.out.printf("%-20s: %s%n", "Project ID", rs.getInt("project_id"));
             System.out.printf("%-20s: %s%n", "Task Name", rs.getString("task_name"));
-            System.out.printf("%-20s: %s%n", "Task Desc", rs.getString("task_desc"));
-
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedNow = now.format(formatter);
-            System.out.printf("%-20s: %s%n", "Current Time", formattedNow);
+            System.out.printf("%-20s: %s%n", "Created At", rs.getString("date_created"));
+            System.out.printf("%-20s: %s %s (ID: %d, Email: %s)%n",
+                "Assigned To", rs.getString("f_name"), rs.getString("l_name"),
+                rs.getInt("e_id"), rs.getString("e_email"));
+            System.out.printf("%-20s: %s%n", "Due Date", rs.getString("due_date"));
+            System.out.printf("%-20s: %s%n", "Status", rs.getString("status"));
             System.out.println("------------------------------------------------");
         } else {
             System.out.println("No project found with ID: " + projectId);
@@ -134,15 +137,16 @@ private int getValidIntegerInput(String prompt) {
         System.out.print(prompt);
         try {
             value = sc.nextInt();
-            sc.nextLine();
+            sc.nextLine(); // Clear the buffer
             valid = true;
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a valid integer.");
-            sc.nextLine();
+            sc.nextLine(); // Clear invalid input
         }
     }
     return value;
 }
+
 
 
 
@@ -211,18 +215,17 @@ private int getValidInteger(String prompt) {
 
 public void viewTaskDetails() {
     Task task = new Task();
-    
     Scanner sc = new Scanner(System.in);
     
-    task.viewTasks();
+    task.viewTasks(); // Display available tasks
     
     int taskId = getValidIntegerInput("Enter Task ID to view details: ");
 
-    String sql = "SELECT t.task_name, t.task_desc, p.due_date, e.e_id, e.f_name, e.l_name, e.e_email " +
+    // Adjusting SQL to fetch detailed task information without project name
+    String sql = "SELECT t.task_name, t.task_desc, t.date_created, p.status, p.due_date " +
                  "FROM tbl_tasks t " +
                  "JOIN tbl_projects p ON p.project_id = p.project_id " +
-                 "LEFT JOIN tbl_employees e ON t.task_id = t.task_id " + 
-                 "WHERE t.task_id = ?";
+                 "WHERE t.task_id = ?"; // Filter by task ID
 
     try (Connection conn = conf.connectDB();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -233,15 +236,9 @@ public void viewTaskDetails() {
             System.out.println("\n--------------- Task Details ---------------");
             System.out.printf("%-20s: %s%n", "Task Name", rs.getString("task_name"));
             System.out.printf("%-20s: %s%n", "Task Desc", rs.getString("task_desc"));
+            System.out.printf("%-20s: %s%n", "Created At", rs.getString("date_created"));
+            System.out.printf("%-20s: %s%n", "Status", rs.getString("status"));
             System.out.printf("%-20s: %s%n", "Due Date", rs.getString("due_date"));
-
-            // Displaying associated employees
-            System.out.println("\n--- Employees Assigned to this Task ---");
-            do {
-                System.out.printf("%-20s: %s %s (%s)%n", "Employee ID", rs.getInt("e_id"), rs.getString("f_name"), rs.getString("l_name"));
-                System.out.printf("%-20s: %s%n", "Email", rs.getString("e_email"));
-                System.out.println("----------------------------------------");
-            } while (rs.next());
 
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
