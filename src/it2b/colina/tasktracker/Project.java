@@ -128,7 +128,7 @@ public class Project {
         System.out.println("Project assigned successfully.");
     }
 
-    private void viewProjects() {
+    void viewProjects() {
         String projectQuery = "SELECT * FROM tbl_projects "
                 + "JOIN tbl_tasks ON tbl_projects.task_id = tbl_tasks.task_id "
                 + "JOIN tbl_employees ON tbl_projects.employee_id = tbl_employees.e_id";

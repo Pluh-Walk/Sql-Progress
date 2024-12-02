@@ -67,9 +67,9 @@ public class Task {
                 response = sc.nextLine();
 
                 if (response.equalsIgnoreCase("Y")) {
-                    validResponse = true; // Valid response, continue
+                    validResponse = true; 
                 } else if (response.equalsIgnoreCase("N")) {
-                    validResponse = true; // Valid response, exit
+                    validResponse = true; 
                 } else {
                     System.out.println("Invalid input. Please enter 'Y' or 'N'.");
                 }
